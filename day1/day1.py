@@ -1,4 +1,4 @@
-with open('day1/input.txt', 'r') as f:
+with open('input.txt', 'r') as f:
     arr = f.read().splitlines()
 
 arr = [int(x) for x in arr]
