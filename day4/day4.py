@@ -3,40 +3,26 @@ import numpy as np
 
 # functions
 def parse_line(entry):  
-    # split on whitespace or newlines
-    full = re.split('[\s\n]', entry)
-    
-    # remove empty strings
-    full = [s for s in full if s]
-    
-    # break into keys and values
-    keyvals = np.transpose([x.split(':') for x in full])
-    keys, values = keyvals[0], keyvals[1]
-    
-    # return dict
-    return dict(zip(keys, values))
+    return {k: v for k, v in re.findall('([a-z]{3}):([^\s(\\n)]+)', entry)}
 
 def has_req_fields(entry):
     req_fields = set(['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid'])
     missing = req_fields - set(entry.keys())
     return len(missing) == 0
 
+def int_in_range(x, low, high):
+    return x.isdigit() and int(x) >= low and int(x) <= high
+
 def validate_field(field, value):
     # expects field (str) and value (str), return True if valid, False otherwise
     if field == 'byr':
-        if not value.isdigit():
-            return False
-        return int(value) in range(1920, 2003)
+        return int_in_range(value, 1920, 2002)
 
     if field == 'iyr':
-        if not value.isdigit():
-            return False
-        return int(value) in range(2010, 2021)
-
+        return int_in_range(value, 2010, 2020)
+    
     if field == 'eyr':
-        if not value.isdigit():
-            return False
-        return int(value) in range(2020, 2031)
+        return int_in_range(value, 2020, 2030)
 
     if field == 'hgt':
         if not re.fullmatch('\d+(cm|in)', value):
