@@ -12,7 +12,7 @@ print(f"Part 1: {n_yes}")
 
 n_yes = 0
 for group in arr:
-    answers = [set(x) for x in group.rstrip().split('\n')]
+    answers = [set(x) for x in group.splitlines()]
     common = set.intersection(*answers)
     n_yes += len(common)
 
